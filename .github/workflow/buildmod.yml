@@ -4,8 +4,6 @@ on:
   push:
     branches: [main] # Kích hoạt khi có thay đổi mã nguồn trên nhánh main
   workflow_dispatch: # Hỗ trợ kích hoạt thủ công
-  release:
-    types: [created] # Kích hoạt khi tạo release
 
 jobs:
   build:
