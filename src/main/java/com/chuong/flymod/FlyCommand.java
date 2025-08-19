@@ -14,7 +14,7 @@ public class FlyCommand {
 
     /**
      * Đăng ký lệnh /fly.
-     * @param dispatcher The command dispatcher.
+     * @param dispatcher The command dispatcher
      */
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("fly")
