@@ -1,8 +1,7 @@
 name: Build and Publish Minecraft Mod
 
 on:
-  push:
-    branches: [main] # Kích hoạt khi có thay đổi mã nguồn trên nhánh main
+  push: # Kích hoạt khi có thay đổi mã nguồn trên mọi nhánh
   workflow_dispatch: # Hỗ trợ kích hoạt thủ công
 
 jobs:
@@ -16,8 +15,8 @@ jobs:
     # Checkout mã nguồn
     - uses: actions/checkout@v4
 
-    # Cài đặt JDK 17 (phù hợp với hầu hết Minecraft modding)
-    - name: Set up JDK 17
+    # Cài đặt JDK 21 (phù hợp với Minecraft 1.21+)
+    - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
@@ -27,17 +26,6 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x gradlew
 
-    # Lưu và khôi phục cache Gradle
-    - name: Cache Gradle dependencies
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-
     # Cài đặt Gradle
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
@@ -46,32 +34,39 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build --build-cache
 
-    # Tự động lấy file .jar từ build/libs/
-    - name: Find JAR file
-      id: find-jar
+    # Lấy phiên bản từ gradle.properties
+    - name: Get Mod Version
+      id: get-version
       run: |
-        JAR_FILE=$(find build/libs -type f -name "*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -n 1)
-        echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
-        echo "jar_name=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
+        VERSION=$(grep "mod_version" gradle.properties | cut -d'=' -f2)
+        echo "mod_version=$VERSION" >> $GITHUB_OUTPUT
       shell: bash
 
-    # Upload file JAR lên GitHub Release (chỉ khi chạy do release)
-    - name: Upload Mod JAR to Release
-      if: github.event_name == 'release' # Chỉ chạy khi sự kiện là release
-      uses: actions/upload-release-asset@v1
+    # Tạo release và upload file JAR
+    - name: Create Release and Upload JAR
+      id: create-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{ steps.find-jar.outputs.jar_file }}
-        asset_name: ${{ steps.find-jar.outputs.jar_name }}
-        asset_content_type: application/java-archive
+      run: |
+        # Lấy thời gian build (định dạng: YYYYMMDD-HHMMSS)
+        BUILD_TIME=$(date -u +"%Y%m%d-%H%M%S")
+        
+        # Đường dẫn file JAR
+        JAR_PATH="./build/libs/fly-mod-${{ steps.get-version.outputs.mod_version }}.jar"
+        
+        # Tên file upload bao gồm thời gian build
+        JAR_NAME="fly-mod-${{ steps.get-version.outputs.mod_version }}-$BUILD_TIME.jar"
+        
+        # Tạo release với tag dựa trên phiên bản
+        TAG_NAME="v${{ steps.get-version.outputs.mod_version }}-$BUILD_TIME"
+        gh release create "$TAG_NAME" --title "Release $TAG_NAME" --notes "Auto-generated release for fly-mod version ${{ steps.get-version.outputs.mod_version }} built at $BUILD_TIME UTC" "$JAR_PATH" -R ${{ github.repository }} --target ${{ github.sha }}
+        
+        echo "release_tag=$TAG_NAME" >> $GITHUB_OUTPUT
+        echo "jar_name=$JAR_NAME" >> $GITHUB_OUTPUT
+      shell: bash
 
-    # (Tùy chọn) Upload file JAR như artifact khi không phải release
-    - name: Upload JAR as Artifact
-      if: github.event_name != 'release' # Chạy khi không phải sự kiện release
-      uses: actions/upload-artifact@v4
-      with:
-        name: mod-jar
-        path: ${{ steps.find-jar.outputs.jar_file }}
-        retention-days: 7 # Lưu artifact trong 7 ngày
+    # Xác nhận upload (tùy chọn, để debug)
+    - name: Verify Upload
+      run: |
+        echo "Uploaded JAR: ${{ steps.create-release.outputs.jar_name }}"
+        echo "Release Tag: ${{ steps.create-release.outputs.release_tag }}"
