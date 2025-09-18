@@ -1,0 +1,73 @@
+# =========================
+# Minecraft Mod Project
+# =========================
+
+# Build outputs
+/build/
+out/
+classes/
+bin/
+
+# Gradle
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.settings/
+*.classpath
+*.project
+
+# OS junk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Logs
+*.log
+
+# Run configurations & local files
+run/
+runClient/
+runServer/
+*.launch
+*.hprof
+
+# Cache
+.cache/
+.gradle/
+libs/
+
+# ForgeGradle mappings (generated)
+.mcp/
+
+# Generated resources
+*.jar
+*.zip
+*.tmp
+*.bak
+
+# Keystore / secrets
+*.jks
+*.keystore
+keystore.properties
+secrets.properties
+
+# Minecraft dev runtime files
+config/
+saves/
+options.txt
+usernamecache.json
+usercache.json
