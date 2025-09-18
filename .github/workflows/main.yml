@@ -37,25 +37,19 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Prepare Artifacts
+      - name: Prepare Artifact
         run: |
           sha_short=${{ steps.vars.outputs.sha_short }}
-          # Rename the original jar file
+          # Find and rename the original jar
           original_jar_path=$(find build/libs -name "*.jar")
-          mv "$original_jar_path" "build/libs/Fly-mod-$sha_short.jar"
-          # Create the zip file from the renamed jar
-          zip -j "Fly-mod-$sha_short.zip" "build/libs/Fly-mod-$sha_short.jar"
+          renamed_jar_path="build/libs/Fly-mod-$sha_short.jar"
+          mv "$original_jar_path" "$renamed_jar_path"
+          # Create the zip file containing the renamed jar
+          zip -j "Fly-mod-$sha_short.zip" "$renamed_jar_path"
 
-      - name: Upload JAR Artifact
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Fly-mod-${{ steps.vars.outputs.sha_short }}.jar
-          path: build/libs/Fly-mod-${{ steps.vars.outputs.sha_short }}.jar
-          if-no-files-found: error
-
-      - name: Upload ZIP Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Fly-mod-${{ steps.vars.outputs.sha_short }}.zip
+          name: Fly-mod-${{ steps.vars.outputs.sha_short }}
           path: Fly-mod-${{ steps.vars.outputs.sha_short }}.zip
           if-no-files-found: error
