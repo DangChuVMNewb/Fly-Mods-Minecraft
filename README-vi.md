@@ -57,6 +57,10 @@ Chỉ cần gõ lệnh sau trong trò chuyện để bật hoặc tắt chế đ
 
 3.  Tệp `.jar` đã build sẽ nằm trong thư mục `build/libs/`.
 
+## Đóng góp
+
+Đây là một dự án miễn phí và mã nguồn mở. Mọi hình thức đóng góp đều được chào đón! Đừng ngần ngại mở một issue hoặc gửi một pull request.
+
 ## Giấy phép
 
 Dự án này được cấp phép theo [CC0-1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).

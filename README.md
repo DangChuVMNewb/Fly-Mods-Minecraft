@@ -57,6 +57,10 @@ Simply type the following command in the chat to toggle fly mode:
 
 3.  The built `.jar` file will be located in the `build/libs/` directory.
 
+## Contributing
+
+This is a free and open-source project. Contributions of any kind are welcome! Feel free to open an issue or submit a pull request.
+
 ## License
 
 This project is licensed under the [CC0-1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) license.
