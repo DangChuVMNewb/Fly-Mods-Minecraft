@@ -1,0 +1,48 @@
+name: Build Minecraft Mod
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      # 1. Checkout source
+      - uses: actions/checkout@v4
+
+      # 2. Setup Java 21 (temurin)
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle # cache maven/gradle deps built-in
+
+      # 3. Setup Gradle with cache
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      # 4. Build with official Gradle action (tận dụng full tính năng)
+      - uses: gradle/actions/gradle-build-action@v2
+        with:
+          arguments: build --build-cache
+
+      # 5. Upload all jars as artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod-artifacts
+          path: build/libs/*.jar
+          if-no-files-found: error
+
+      # 6. (Optional) Lưu báo cáo test/coverage nếu có
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: build/reports/**
+          if-no-files-found: ignore
