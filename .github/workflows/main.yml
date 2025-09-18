@@ -1,48 +1,30 @@
-name: Build Minecraft Mod
+# Automatically build the project and run any configured tests for every push
+# and submitted pull request. This can help catch issues that only occur on
+# certain platforms or Java versions, and provides a first line of defence
+# against bad commits.
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+name: build
+on: [pull_request, push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
+    runs-on: ubuntu-24.04
     steps:
-      # 1. Checkout source
-      - uses: actions/checkout@v4
-
-      # 2. Setup Java 21 (temurin)
-      - uses: actions/setup-java@v4
+      - name: checkout repository
+        uses: actions/checkout@v4
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+      - name: setup jdk
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'temurin'
-          cache: gradle # cache maven/gradle deps built-in
-
-      # 3. Setup Gradle with cache
-      - uses: gradle/actions/setup-gradle@v4
+          distribution: 'microsoft'
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: build
+        run: ./gradlew build
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v4
         with:
-          cache-read-only: ${{ github.event_name == 'pull_request' }}
-
-      # 4. Build with official Gradle action (tận dụng full tính năng)
-      - uses: gradle/actions/gradle-build-action@v2
-        with:
-          arguments: build --build-cache
-
-      # 5. Upload all jars as artifact
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mod-artifacts
-          path: build/libs/*.jar
-          if-no-files-found: error
-
-      # 6. (Optional) Lưu báo cáo test/coverage nếu có
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-reports
-          path: build/reports/**
-          if-no-files-found: ignore
+          name: Artifacts
+          path: build/libs/
