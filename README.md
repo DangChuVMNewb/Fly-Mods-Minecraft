@@ -22,7 +22,7 @@ A simple Fabric mod that allows players to toggle flight mode on and off with a 
 ## Installation
 
 1.  Ensure you have [Fabric Loader](https://fabricmc.net/use/) and [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) installed.
-2.  Download the latest release from the [Releases page](https://github.com/DangChuVMNewb/Fly-Mods-Minecraft/releases) or the [Actions workflow](https://nightly.link/DangChuVMNewb/Fly-Mods-Minecraft/workflows/main/main).
+2.  Download the latest release from the [Releases page](https://github.com/DangChuVMNewb/Fly-Mods-Minecraft/releases) or the [Actions workflow](https://nightly.link/DangChuVMNewb/Fly-Mods-Minecraft/workflows/build/main).
 3.  Place the downloaded `.jar` file into your `.minecraft/mods` folder.
 4.  Launch the game using the Fabric profile.
 

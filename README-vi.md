@@ -22,7 +22,7 @@ Một mod Fabric đơn giản cho phép người chơi bật và tắt chế đ�
 ## Cài đặt
 
 1.  Đảm bảo bạn đã cài đặt [Fabric Loader](https://fabricmc.net/use/) và [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api).
-2.  Tải xuống bản phát hành mới nhất từ trang [Releases](https://github.com/DangChuVMNewb/Fly-Mods-Minecraft/releases) hoặc [Actions workflow](https://nightly.link/DangChuVMNewb/Fly-Mods-Minecraft/workflows/main/main).
+2.  Tải xuống bản phát hành mới nhất từ trang [Releases](https://github.com/DangChuVMNewb/Fly-Mods-Minecraft/releases) hoặc [Actions workflow](https://nightly.link/DangChuVMNewb/Fly-Mods-Minecraft/workflows/build/main).
 3.  Đặt tệp `.jar` đã tải vào thư mục `.minecraft/mods` của bạn.
 4.  Khởi chạy trò chơi bằng profile Fabric.
 
