@@ -36,7 +36,7 @@ Chỉ cần gõ lệnh sau trong trò chuyện để bật hoặc tắt chế đ
 
 Một tin nhắn trên màn hình sẽ xác nhận chế độ bay đã được bật hay tắt.
 
-## Kế hoạch tương lai
+## Mục tiêu tương lai
 
 Chúng tôi đang tích cực làm việc để cải thiện Fly Mod. Dưới đây là một số tính năng chúng tôi dự định triển khai trong tương lai gần:
 

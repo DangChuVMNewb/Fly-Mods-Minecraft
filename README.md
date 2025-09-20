@@ -36,7 +36,7 @@ Simply type the following command in the chat to toggle flight mode:
 
 An on-screen message will confirm whether flight has been enabled or disabled.
 
-## Future Plans
+## Future Goals
 
 We are actively working on improving Fly Mod. Here are some of the features we plan to implement in the near future:
 
