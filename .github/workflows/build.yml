@@ -28,7 +28,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: build
-        run: ./gradlew build
+        run: gradle build
 
       - name: Get short commit hash
         id: vars
